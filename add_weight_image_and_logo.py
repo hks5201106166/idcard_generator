@@ -54,7 +54,7 @@ for ttt,file_gen in enumerate(files_gen):
             image_gen_copy_logo[point_x:(h + point_x), point_y:(w + point_y)] = add_logo
             train_data = np.hstack((image_gen_copy, image_gen_copy_logo))
             image_gen_copy[point_x:(h+point_x),point_y:(w+point_y)]=add_logo
-            cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/gen_data_with_logo/'+file_gen.split('.jpg')[0]+'_'+str(i)+'.jpg',train_data)
+            cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/gen_data_with_logo/'+image_name+'_'+str(i)+'.jpg',train_data)
     else:
         for i in range(4):
             l = len(files)

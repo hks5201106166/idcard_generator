@@ -21,6 +21,8 @@ for i in range(x):
 for ttt,file_gen in enumerate(files_gen):
     print(ttt)
     image_gen=cv2.imread(os.path.join(path_gen+'generator_datas2',file_gen),0)
+    cv2.imshow('hks',image_gen)
+    cv2.waitKey(0)
     files_back=file_gen.split('_')[-1]
     if files_back=='1.jpg':
         for i in range(4):

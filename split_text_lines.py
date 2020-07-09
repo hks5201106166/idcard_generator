@@ -194,18 +194,38 @@ def gen_faker_card_run():
     path = '/home/simple/mydemo/ocr_project/idcard_generator_project/generator_datas1/'
     labels = csv.reader(
         open('/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/src/generate_labels1.csv'))
+    # font_template = json.load(open(
+    #     '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/split_text_template/0adyypn1yq_1.json'))
+    # xingming = font_template['shapes'][0]['points']
+    # xingbie = font_template['shapes'][1]['points']
+    # mingzhu = font_template['shapes'][2]['points']
+    # chusheng = font_template['shapes'][3]['points']
+    # dizhi = font_template['shapes'][4]['points']
+    # shengfengzhenghao = font_template['shapes'][5]['points']
+    # back_template = json.load(open(
+    #     '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/image_match/back1.json'))
+    # qianfajiguang = back_template['shapes'][0]['points']
+    # youxiaoqixian = back_template['shapes'][1]['points']
+
     font_template = json.load(open(
-        '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/split_text_template/0adyypn1yq_1.json'))
+        '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/image_match/front.json'))
     xingming = font_template['shapes'][0]['points']
     xingbie = font_template['shapes'][1]['points']
     mingzhu = font_template['shapes'][2]['points']
-    chusheng = font_template['shapes'][3]['points']
-    dizhi = font_template['shapes'][4]['points']
-    shengfengzhenghao = font_template['shapes'][5]['points']
+    chusheng_year = font_template['shapes'][3]['points']
+    chusheng_month = font_template['shapes'][4]['points']
+    chusheng_day = font_template['shapes'][5]['points']
+    dizhi_line1 = font_template['shapes'][6]['points']
+    dizhi_line2 = font_template['shapes'][7]['points']
+    dizhi_line3 = font_template['shapes'][8]['points']
+    shengfengzhenghao = font_template['shapes'][9]['points']
     back_template = json.load(open(
-        '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/split_text_template/0a754prsnl_0.json'))
-    qianfajiguang = back_template['shapes'][0]['points']
-    youxiaoqixian = back_template['shapes'][1]['points']
+        '/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/image_match/back1.json'))
+    qianfajiguang1 = back_template['shapes'][1]['points']
+    qianfajiguang2 = back_template['shapes'][2]['points']
+    youxiaoqixian = back_template['shapes'][0]['points']
+
+
     aug_brightness = iaa.MultiplyBrightness((0.5, 1.))
     aug_gaussian =iaa.GaussianBlur((0, 2.0))
 
@@ -255,7 +275,7 @@ def gen_faker_card_run():
             #cv2.imwrite(result_card_path + '/{}_0.jpg'.format(image_name), img_res_b)
             cnt = cnt + 1
             print(cnt)
-            os.mkdir(path_save + image_name)
+            # os.mkdir(path_save + image_name)
             for i in range(4):
                 l = len(files)
                 index = np.random.randint(0, l)
@@ -272,36 +292,40 @@ def gen_faker_card_run():
                 xingming_rect = image_gen_copy[int(xingming[0][1]):int(xingming[1][1]), int(xingming[0][0]):int(xingming[1][0])]
                 xingbie_rect = image_gen_copy[int(xingbie[0][1]):int(xingbie[1][1]), int(xingbie[0][0]):int(xingbie[1][0])]
                 mingzhu_rect = image_gen_copy[int(mingzhu[0][1]):int(mingzhu[1][1]), int(mingzhu[0][0]):int(mingzhu[1][0])]
-                chusheng_rect = image_gen_copy[int(chusheng[0][1]):int(chusheng[1][1]), int(chusheng[0][0]):int(chusheng[1][0])]
-                chusheng_rect_year,chusheng_rect_month,chusheng_rect_day=chusheng_split(chusheng_rect)
-                dizhi_rect = image_gen_copy[int(dizhi[0][1]):int(dizhi[1][1]), int(dizhi[0][0] + 5):int(dizhi[1][0] - 35)]
-                dizhi_rect = dizhi_split(dizhi_rect)
+
+                chusheng_rect_year=image_gen_copy[int(chusheng_year[0][1]):int(chusheng_year[1][1]), int(chusheng_year[0][0]):int(chusheng_year[1][0])]
+                chusheng_rect_month=image_gen_copy[int(chusheng_month[0][1]):int(chusheng_month[1][1]), int(chusheng_month[0][0]):int(chusheng_month[1][0])]
+                chusheng_rect_day=image_gen_copy[int(chusheng_day[0][1]):int(chusheng_day[1][1]), int(chusheng_day[0][0]):int(chusheng_day[1][0])]
+                dizhi_rect_line1 = image_gen_copy[int(dizhi_line1[0][1]):int(dizhi_line1[1][1]), int(dizhi_line1[0][0]):int(dizhi_line1[1][0])]
+                dizhi_rect_line2 = image_gen_copy[int(dizhi_line2[0][1]+2):int(dizhi_line2[1][1]), int(dizhi_line2[0][0]):int(dizhi_line2[1][0])]
+                dizhi_rect_line3 = image_gen_copy[int(dizhi_line3[0][1]+3):int(dizhi_line3[1][1]), int(dizhi_line3[0][0]):int(dizhi_line3[1][0])]
                 shengfengzhenghao_rect = image_gen_copy[int(shengfengzhenghao[0][1]):int(shengfengzhenghao[1][1]),
-                                         int(shengfengzhenghao[0][0]):int(shengfengzhenghao[1][0])]
+                                         int(shengfengzhenghao[0][0]+5):int(shengfengzhenghao[1][0])]
 
-                # cv2.imshow('xingming_rect',xingming_rect)
-                # cv2.imshow('xingbie_rect',xingbie_rect)
-                # cv2.imshow('mingzhu_rect', mingzhu_rect)
-                # #cv2.imshow('chusheng_rect', chusheng_rect)
-                # cv2.imshow('dizhi_rect', dizhi_rect)
-                # cv2.imshow('shengfengzhenghao_rect', shengfengzhenghao_rect)
-                # cv2.imshow('chusheng_rect_year', chusheng_rect_year)
-                # cv2.imshow('chusheng_rect_month', chusheng_rect_month)
-                # cv2.imshow('chusheng_rect_day', chusheng_rect_day)
+                cv2.imshow('xingming_roi',xingming_rect)
+                cv2.imshow('xingbie_roi',xingbie_rect)
+                cv2.imshow('mingzhu_roi', mingzhu_rect)
+                cv2.imshow('chusheng_year_roi', chusheng_rect_year)
+                cv2.imshow('chusheng_month_roi', chusheng_rect_month)
+                cv2.imshow('chusheng_day_roi', chusheng_rect_day)
+                cv2.imshow('dizhi_line1_roi', dizhi_rect_line1)
+                cv2.imshow('dizhi_line2_roi', dizhi_rect_line2 )
+                cv2.imshow('dizhi_line3_roi', dizhi_rect_line3)
+                cv2.imshow('shengfengzhenghao_roi',shengfengzhenghao_rect)
+                cv2.waitKey(1000)
 
 
 
-
-                cv2.imwrite(path_save+image_name+'/'+'xingming_rect'+'-'+str(i)+'.jpg',xingming_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'dizhi_rect' + '-' + str(i) + '.jpg', dizhi_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'xingbie_rect' + '-' + str(i) + '.jpg', xingbie_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'mingzhu_rect' + '-' + str(i) + '.jpg', mingzhu_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'shengfengzhenghao_rect' + '-' + str(i) + '.jpg', shengfengzhenghao_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_year' + '-' + str(i) + '.jpg', chusheng_rect_year)
-                cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_month' + '-' + str(i) + '.jpg',
-                            chusheng_rect_month)
-                cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_day' + '-' + str(i) + '.jpg',
-                            chusheng_rect_day)
+                # cv2.imwrite(path_save+image_name+'/'+'xingming_rect'+'-'+str(i)+'.jpg',xingming_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'dizhi_rect' + '-' + str(i) + '.jpg', dizhi_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'xingbie_rect' + '-' + str(i) + '.jpg', xingbie_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'mingzhu_rect' + '-' + str(i) + '.jpg', mingzhu_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'shengfengzhenghao_rect' + '-' + str(i) + '.jpg', shengfengzhenghao_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_year' + '-' + str(i) + '.jpg', chusheng_rect_year)
+                # cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_month' + '-' + str(i) + '.jpg',
+                #             chusheng_rect_month)
+                # cv2.imwrite(path_save + image_name + '/' + 'chusheng_rect_day' + '-' + str(i) + '.jpg',
+                #             chusheng_rect_day)
 
             for i in range(4):
                 l = len(files)
@@ -314,13 +338,18 @@ def gen_faker_card_run():
                 image_gen_copy = aug_brightness_deterministic.augment_images(images=[image_gen_copy])[0]
                 image_gen_copy = aug_gaussian_deterministic.augment_images(images=[image_gen_copy])[0][:,:,0]
 
-                qianfajiguang_rect = image_gen_copy[int(qianfajiguang[0][1]):int(qianfajiguang[1][1] + 8),
-                                     int(qianfajiguang[0][0]):int(qianfajiguang[1][0] + 3)]
-                qianfajiguang_rect = qianfajiguang_split(qianfajiguang_rect)
-                youxiaoqixian_rect = image_gen_copy[int(youxiaoqixian[0][1]):int(youxiaoqixian[1][1]),
-                                     int(youxiaoqixian[0][0]):int(youxiaoqixian[1][0])]
-                cv2.imwrite(path_save + image_name + '/' + 'qianfajiguang_rect' + '-' + str(i) + '.jpg', qianfajiguang_rect)
-                cv2.imwrite(path_save + image_name + '/' + 'youxiaoqixian_rect' + '-' + str(i) + '.jpg',youxiaoqixian_rect)
+                qianfajiguang1_roi = image_gen_copy[int(qianfajiguang1[0][1] ):int(qianfajiguang1[1][1]),
+                                     int(qianfajiguang1[0][0]):int(qianfajiguang1[1][0])]
+                qianfajiguang2_roi = image_gen_copy[int(qianfajiguang2[0][1]-3):int(qianfajiguang2[1][1]-3),
+                                     int(qianfajiguang2[0][0]):int(qianfajiguang2[1][0])]
+                youxiaoqixian_roi = image_gen_copy[int(youxiaoqixian[0][1]):int(youxiaoqixian[1][1]),
+                                    int(youxiaoqixian[0][0]):int(youxiaoqixian[1][0])]
+                cv2.imshow('qianfajiguang1_roi', qianfajiguang1_roi)
+                cv2.imshow('qianfajiguang2_roi', qianfajiguang2_roi)
+                cv2.imshow('youxiaoqixian_roi', youxiaoqixian_roi)
+                cv2.waitKey(1000)
+                # cv2.imwrite(path_save + image_name + '/' + 'qianfajiguang_rect' + '-' + str(i) + '.jpg', qianfajiguang_rect)
+                # cv2.imwrite(path_save + image_name + '/' + 'youxiaoqixian_rect' + '-' + str(i) + '.jpg',youxiaoqixian_rect)
                 # cv2.imshow('qianfajiguang_rect', qianfajiguang_rect)
                 # cv2.imshow('youxiaoqixian_rect', youxiaoqixian_rect)
                 # cv2.waitKey(3000)

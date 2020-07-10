@@ -250,6 +250,8 @@ def gen_faker_card_run():
                 #image_gen_copy=seq_nologo(image=np.stack([image_gen_copy,image_gen_copy,image_gen_copy],axis=2))
 
                 train_data = np.hstack((image_gen_copy_logo,image_gen_copy))
+                cv2.imshow('image', train_data)
+                cv2.waitKey(300000)
                 #image_gen_copy[point_x:(h + point_x), point_y:(w + point_y)] = add_logo[:,:]
                 cv2.imwrite('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image2/train/' +
                             image_name +'_'+'0'+ '_' + str(i) + '.jpg', train_data)

@@ -170,7 +170,7 @@ def gen_faker_card_run():
     csv_reader_lines_train,csv_reader_lines_val=train_test_split(csv_reader_lines,test_size=0.000001, random_state=0)# 逐行读取csv文件
     date = []  # 创建列表准备接收csv各行数据
     cnt = 0  # 记录csv文件行数
-    path='/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/template/'
+    path='/home/ubuntu/hks/ocr/idcard_generator_project/idcard_generator/template/'
     files = os.listdir(os.path.join(path, 'fuzhiwuxiao_mask'))
     for one_line in csv_reader_lines_train:
             date.append(one_line)
@@ -211,7 +211,7 @@ def gen_faker_card_run():
             cnt = cnt + 1
             print(cnt)
 
-            for i in range(1):
+            for i in range(4):
                 l = len(files)
                 index = np.random.randint(0, l)
 
@@ -253,13 +253,17 @@ def gen_faker_card_run():
                 #image_gen_copy=seq_nologo(image=np.stack([image_gen_copy,image_gen_copy,image_gen_copy],axis=2))
 
                 train_data = np.hstack((image_gen_copy_logo,image_gen_copy))
-                cv2.imshow('image', train_data)
-                cv2.waitKey(300)
+                # cv2.imshow('image', train_data)
+                # cv2.waitKey(300)
                 #image_gen_copy[point_x:(h + point_x), point_y:(w + point_y)] = add_logo[:,:]
-                cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/remove_logo_and_aug_image3/train/' +
-                            image_name +'_'+'1'+ '_' + str(i) + '.jpg', train_data)
+                if os.path.exists('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/' +
+                            image_name)==False:
+                    os.mkdir('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/' +
+                                image_name)
+                cv2.imwrite('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/' +image_name+'/'+
+                            image_name +'_'+'1'+ '-' + str(i) + '.jpg', train_data)
 
-            for i in range(1):
+            for i in range(4):
                 l = len(files)
                 index = np.random.randint(0, l)
                 image_gen_copy = img_res_b.copy()
@@ -306,8 +310,12 @@ def gen_faker_card_run():
                 # #cv2.imshow('rect',rect2)
                 # # cv2.imshow('image', train_data)
                 # cv2.waitKey(300000)
-                cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/remove_logo_and_aug_image3/train/' +
-                            image_name+'_'+'0'+ '_' + str(i) + '.jpg', train_data)
+                if os.path.exists('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/' +
+                                  image_name) == False:
+                        os.mkdir('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/' +
+                                 image_name)
+                cv2.imwrite('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/train/'+image_name+'/' +
+                            image_name+'_'+'0'+ '-' + str(i) + '.jpg', train_data)
                 del image_gen_copy_logo
     for one_line in csv_reader_lines_val:
         date.append(one_line)
@@ -388,8 +396,12 @@ def gen_faker_card_run():
 
             train_data = np.hstack((image_gen_copy_logo,image_gen_copy))
             #image_gen_copy[point_x:(h + point_x), point_y:(w + point_y)] = add_logo[:,:]
-            cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/remove_logo_and_aug_image3/val/' +
-                        image_name +'_'+'0'+ '_' + str(i) + '.jpg', train_data)
+            if os.path.exists('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +
+                     image_name) == False:
+                os.mkdir('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +
+                         image_name)
+            cv2.imwrite('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +image_name+'/'+
+                        image_name +'_'+'0'+ '-' + str(i) + '.jpg', train_data)
 
         for i in range(4):
             l = len(files)
@@ -435,14 +447,18 @@ def gen_faker_card_run():
             # #cv2.imshow('rect',rect2)
             # # cv2.imshow('image', train_data)
             # cv2.waitKey(300000)
-            cv2.imwrite('/home/simple/mydemo/ocr_project/idcard_generator_project/remove_logo_and_aug_image3/val/' +
-                        image_name+'_'+'1'+ '_' + str(i) + '.jpg', train_data)
+            if os.path.exists('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +
+                     image_name) == False:
+                    os.mkdir('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +
+                             image_name)
+            cv2.imwrite('/home/ubuntu/hks/ocr/idcard_generator_project/remove_logo_and_aug_image/val/' +image_name+'/'+
+                        image_name+'_'+'1'+ '-' + str(i) + '.jpg', train_data)
             del image_gen_copy_logo
 
 
 
 if __name__ == "__main__":
-    roi_mask = cv2.imread('/home/simple/mydemo/ocr_project/idcard_generator_project/idcard_generator/背面.jpg', 0)
+    roi_mask = cv2.imread('/home/ubuntu/hks/ocr/idcard_generator_project/idcard_generator/背面.jpg', 0)
     roi_mask[roi_mask <= 150] = 0
     roi_mask[roi_mask > 150] = 255
     x, y = roi_mask.shape

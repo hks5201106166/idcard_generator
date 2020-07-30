@@ -13,14 +13,12 @@ files=os.listdir('/home/simple/mydemo/ocr_project/idcard_generator_project/gen_d
 files_train,files_val=train_test_split(files,test_size=0.005, random_state=0)
 seq = iaa.Sequential(
     [
-
         iaa.OneOf([
                     iaa.GaussianBlur((0, 2.0)), # blur images with a sigma between 0 and 3.0
                 ]),
         iaa.MultiplyBrightness((0.5, 1.)),
     ],
-    random_order=True
-)
+    random_order=True)
 for i,file in enumerate(files_val):
     print('gen val data {}'.format(i))
     image = cv2.imread('/home/simple/mydemo/ocr_project/idcard_generator_project/gen_data_with_logo/' + file)
